@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section><modules><module id="departments" name="departments" title="Отрасли"/><module id="m1" name="content" title="Перечень вакансий"/><module id="m2" name="meta" title="Метатэги"/></modules><template id="default"><template id="def"/><template id="departments"/></template></section>

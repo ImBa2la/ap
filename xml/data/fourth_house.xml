@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section>
+	<modules>
+		<module id="m1" name="plan" title="Планы здания">
+			
+			
+			<plan id="p1" title="План 1ого этажа" name="plan" planPath="userfiles/projects/plans/___online-plan-1.png">
+				<gallery name="gallery">
+					<img id="i4" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i4.jpg" width="576" height="352">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i4_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i1" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i1.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i1_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i2" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i2.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i2_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i3" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i3.jpg" width="746" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i3_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i5" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i5.jpg" width="746" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i5_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i6" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i6.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i6_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i7" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i7.jpg" width="746" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i7_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i8" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i8.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i8_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i9" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i9.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i9_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i11" src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i11.jpg" width="576" height="341">
+						<preview src="userfiles/projects/plan_p1_gallery/fourth_house_m1_i11_preview.jpg" width="85" height="60"/>
+					</img>
+				</gallery>
+				
+			</plan>
+			<plan id="p2" title="План этажей 2-16" name="plan" planPath="userfiles/projects/plans/___online-plan-2.png">
+				<gallery name="gallery">
+					<img id="i1" src="userfiles/projects/plan_p2_gallery/fourth_house_m1_i1.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p2_gallery/fourth_house_m1_i1_preview.jpg" width="85" height="60"/>
+					</img>
+					<img id="i2" src="userfiles/projects/plan_p2_gallery/fourth_house_m1_i2.jpg" width="750" height="1024">
+						<preview src="userfiles/projects/plan_p2_gallery/fourth_house_m1_i2_preview.jpg" width="85" height="60"/>
+					</img>
+				</gallery>
+				
+			</plan>
+		</module>
+	</modules>
+	<template id="default">
+		<template id="online"/></template>
+</section>

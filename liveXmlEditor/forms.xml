@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+	<rowlist id="apForms_list_forms" title="Перечень списков и форм" pageSize="10" sort="asc" add="new" addPrefix="form" delete="delete" date="10.05.2012 15:31" stamp="0">
+		<col name="sort" header="№"/>
+		<col name="title" header="Заголовок"/>
+		<col name="date" header="Дата"/>
+		<buttons>
+			<button action="edit_form" title="Редактировать" />
+			<button action="clone" title="Копировать" />
+			<button action="delete" title="Удалить" />
+		</buttons>
+	</rowlist>
+	<rowlist id="apForms_list_fields" title="Перечень полей и аттрибутов" pageSize="10" sort="asc" add="add" delete="delete" date="10.05.2012 15:31" stamp="0">
+		<col name="sort" header="№"/>
+		<col name="name" header="Имя аттрибута"/>
+		<col name="value" header="Значение аттрибута"/>
+		<buttons>
+			<button action="edit" title="Редактировать" />
+			<button action="delete" title="Удалить" />
+		</buttons>
+	</rowlist>
+	<form id="apForms_filter" class="filter" title="форма фильтрации для списков 11" method="get" baseURI="url://">
+		<field type="select" name="type" label="Тип записей" uri="&amp;type">
+			<option value="form">Формы</option>
+			<option value="rowlist">Списки</option>
+		</field>
+		<buttonset>
+			<button type="submit" value="Найти" class="ok" action="filter"/>
+		</buttonset>
+	</form>
+	<form id="apForms_addNewForm" title="Добавление формы" method="post" autocheck="autocheck" baseURI="file:///ap/xml/forms.xml?/forms/form[@id='%FID%']" date="10.05.2012 15:31" stamp="0">
+		<field type="text" name="fId" label="ID формы" check="empty"/>
+		<field type="text" name="fTitle" label="Заголовок формы" uri="/@title" check="empty"/>
+		<field type="select" name="method" label="Метод отправки" uri="/@method">
+			<option value="post">POST</option>
+			<option value="get">GET</option>
+		</field>
+		<field type="checkbox" name="autocheck" label="Валидация" uri="/@autocheck"/>
+		<field type="text" name="baseURI" label="Базовый урл" uri="/@baseURI"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="add"/>
+			<button type="submit" value="Применить" class="ok" action="apply_add"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form>
+	<form id="apForms_editForm" title="Редактирование формы “%FORM%”" method="post" autocheck="autocheck" baseURI="file:///ap/xml/forms.xml?/forms/form[@id='%FID%']" date="10.05.2012 15:31" stamp="0">
+		<field type="text" name="fId" label="ID формы" check="empty" uri="/@id" readonly="readonly"/>
+		<field type="text" name="fTitle" label="Заголовок формы" uri="/@title" check="empty"/>
+		<field type="select" name="method" label="Метод отправки" uri="/@method">
+			<option value="post">POST</option>
+			<option value="get">GET</option>
+		</field>
+		<field type="checkbox" name="autocheck" label="Валидация" uri="/@autocheck"/>
+		<field type="text" name="baseURI" label="Базовый урл" uri="/@baseURI"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="update"/>
+			<button type="submit" value="Применить" class="ok" action="apply_update"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form>
+<form id="newForm" date="15.05.2012 14:25" stamp="1337077502" title="New Form" method="get" baseURI="132"/></forms>

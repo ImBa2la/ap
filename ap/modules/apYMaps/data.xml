@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<form id="ymaps_form_settings" title="Настройки" method="post" autocheck="autocheck" baseURI="file:///xml/data/%ID%.xml?/section/modules/module[@id='%MD%']">
+		<param name="row" uri="/@id"/>
+		<field type="text" name="map_id" label="Идентификатор карты Яндекс" size="40" uri="/map/@id"/>
+		<field type="text" name="map_key" label="Ключ карты Яндекс" size="40" uri="/map/@key"/>
+		<field type="select" name="map_tpl" label="Шаблон карты Яндекс" size="40" uri="/map/@tpl"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="update"/>
+			<button type="submit" value="Применить" class="ok" action="apply_update"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form>
+</data>

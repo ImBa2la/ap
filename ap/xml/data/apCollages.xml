@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section>	
+	<!-- Модули -->
+	<modules>
+		<module id="collage" title="Коллаж на главной" name="apContent">
+			<form id="home_collage" title="Изображение и текст на главной" method="post" autocheck="autocheck" baseURI="file:///xml/data/home.xml?/section">
+				<field type="html" name="text" label="Текст" uri="/collage/desc" height='350'/>
+				<field type="text" name="link" label="Ссылка" uri="/collage/@link"/>
+				<field type="text" name="top" label="Смещение сверху" uri="/collage/@top" size="4"/>
+				<field type="text" name="left" label="Смещение слева" uri="/collage/@left" size="4"/>
+				<field type="image" name="img" label="Изображение" uri="/collage" baseURI="file:///userfiles/home" max="1">
+					<param name="label" uri="/%IMG_NAME%.jpg?w=980" preview="preview"/>
+				</field>
+				<buttonset>
+					<button type="submit" value="Сохранить" class="ok" action="save"/>
+				</buttonset>
+			</form>
+		</module>
+		<module id="banner" title="Баннер на страницах" name="apContent">
+			<form id="form_banners" title="Изображение и текст на главной" method="post" autocheck="autocheck" baseURI="file:///xml/site.xml?/site">
+				<field type="html" name="text" label="Текст" uri="/banner" height='350'/>
+				<buttonset>
+					<button type="submit" value="Сохранить" class="ok" action="save"/>
+				</buttonset>
+			</form>
+		</module>
+	</modules>
+</section>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form id="newForm" date="1115.05.2012 14:25" stamp="1337077502" title="New Form" method="get" baseURI="132" asd="dsa"/>

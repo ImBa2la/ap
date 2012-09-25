@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section><modules><module id="m1" name="apContent" title="Вакансии"><form title="Редактирование раздела" id="content_form" method="post" autocheck="autocheck" baseURI="file:///xml/data/%ID%.xml?/section/modules/module[@id='%MD%']">
+		<field type="html" name="content" label="Содержание" uri="/html" height="350"/>
+		<buttonset><button type="submit" value="Сохранить" class="ok" action="save"/></buttonset>
+	</form></module><module id="m3" name="apSubsections" title="Перечень вакансий"><form id="form_edit" title="Изменить подкаталог" method="post" autocheck="autocheck" baseURI="file:///xml/structure.xml?/structure/%PATH%sec[@id='%ID%']">
+		<param name="row" uri="/@id"/>
+		<field type="text" name="title" label="Заголовок" size="60" uri="/@title" check="empty"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="update"/>
+			<button type="submit" value="Применить" class="ok" action="apply_update"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><form id="form_add" title="Добавить подкаталог" method="post" autocheck="autocheck" pref="cv_">
+		<field type="text" name="title" label="Заголовок" size="60" check="empty"/>
+		<field type="text" name="alias" label="Ссылка" size="40" check="empty"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="add"/>
+			<button type="submit" value="Применить" class="ok" action="apply_add"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><rowlist id="list" pageSize="10" add="add" delete="delete">
+		<col name="sort" header="№"/>
+		<col name="title" header="Заголовок"/>
+		<buttons>
+			<button action="edit" title="Редактировать"/>
+			<button action="delete" title="Удалить"/>
+			<button action="move" title="Переместить"/>
+		</buttons>
+	</rowlist><template id="p1"/></module><module id="m4" name="apSubscribers" title="Подписка и рассылка"><form id="subscribers_form_edit" title="Изменить данные" method="post" autocheck="autocheck" baseURI="mysql://default/%TABLE%?id=%ID%">
+		<param name="row" uri="#id"/>
+		<field type="text" name="name" label="Имя" size="40" uri="#name"/>
+		<field type="text" name="surname" label="Фамилия" size="40" uri="#surname"/>
+		<field type="text" name="city" label="Город" size="20" uri="#city"/>
+		<field type="email" name="email" label="Электронная почта" size="40" uri="#email" check="email empty"/>
+		<field type="textarea" name="comment" label="Комментарий" uri="#comment"/>
+		<field type="checkbox" name="active" label="Учавствует в рассылке" uri="#active"/>
+		<field type="checkboxset" name="list" label="Список вакансий для подписки"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="update"/>
+			<button type="submit" value="Применить" class="ok" action="apply_update"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><form id="subscribers_form_add" title="Добавить подписчика" method="post" autocheck="autocheck" baseURI="mysql://default/%TABLE%">
+		<param name="date" uri="#date"/>
+		<field type="text" name="name" label="Имя" size="40" uri="#name"/>
+		<field type="text" name="surname" label="Фамилия" size="40" uri="#surname"/>
+		<field type="text" name="city" label="Город" size="20" uri="#city"/>
+		<field type="email" name="email" label="Электронная почта" size="40" uri="#email" check="email empty"/>
+		<field type="textarea" name="comment" label="Комментарий" uri="#comment"/>
+		<field type="checkbox" name="active" label="Учавствует в рассылке" uri="#active"/>
+		<field type="checkboxset" name="list" label="Список вакансий для подписки"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="add"/>
+			<button type="submit" value="Применить" class="ok" action="apply_add"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><rowlist id="subscribers_list" pageSize="10" sort="asc">
+		<filter logic="and" header="Фильтр" label="Найти">
+			<field type="text" name="email" operator="like" label="E-mail"/>
+		</filter>
+		<col name="sort" header="№"/>
+		<col name="name" header="Контактное лицо" sort="1"/>
+		<col name="email" header="E-mail" sort="1"/>
+		<col name="active"/>
+		<buttons>
+			<button action="edit" title="Редактировать"/>
+			<button action="delete" title="Удалить"/>
+		</buttons>
+		<actions>
+			<action name="new" title="Добавить" class="add"/>
+			<action name="delete" title="Удалить выбранное" class="del"/>
+			<action name="spam" title="Разослать сообщение"/>
+		</actions>
+	</rowlist></module><module id="m2" name="apMeta" title="Метатэги"><form title="Редактирование метатэгов" id="meta_form" method="post" autocheck="autocheck" baseURI="file:///xml/data/%ID%.xml?/section/modules/module[@id='%MD%']">
+	<field type="text" name="title" label="Заголовок" size="60" uri="/title"/>
+	<field type="text" name="keywords" label="Ключевые слова" size="60" uri="/keywords"/>
+	<field type="text" name="description" label="Описание" size="60" uri="/description"/>
+	<buttonset><button type="submit" value="Сохранить" class="ok" action="save"/></buttonset>
+</form></module></modules></section>

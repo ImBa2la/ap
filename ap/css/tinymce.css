@@ -1,0 +1,42 @@
+/******************************** MAIN STYLES ********************************/
+* {margin: 0;padding: 0;}
+body{color:#222222;}
+body, input, textarea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color:#000;}
+img {border: none;}
+img.left {float:left; margin: 0 5px 5px 0;}
+img.right {float:right; margin: 0 0 5px 5px;}
+p {margin-bottom:15px;line-height:16px;}
+ol,ul {padding:0 0 10px 20px; overflow:auto; margin:0 0 15px;}
+li {padding:0;margin:0 0 5px;line-height:16px;}
+ol ol,ul ul,ol ul,ul ol{overflow:auto;margin:0 0 10px;}
+a{color: #557186;text-decoration:underline;}
+a:hover{color:#C2AE8B;text-decoration: none;}
+a:visited {color: #6E6C64;}
+object {z-index: 1;}
+h1 {
+	font-weight:normal;
+	font-size:20px;
+	color:#557186;
+	margin:0 0 15px;
+}
+h2 {font-size:18px;font-weight:normal;color:#000;padding:0;margin:0 0 10px;}
+h3 {font-size: 16px;margin-bottom:5px;color: #000;}
+h1 + h1,h1 + h2,h1 + h3,
+h2 + h1,h2 + h2,h2 + h3,
+h3 + h1,h3 + h2,h3 + h3{margin:0 0 5px; padding:0;}
+header, article, nav, aside, section, footer {display: block;position: relative;}
+.clear{clear:both;}
+
+table{border-collapse:collapse;}
+table caption{
+	font-size:15px;
+	font-weight:normal;
+	text-align:left;
+	padding:10px 10px 5px;
+	margin:0;}
+table th,table td{}
+table th{}
+table td{}

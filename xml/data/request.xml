@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section>
+	<modules>
+		<module id="m1" name="content" title="Задайте вопрос">
+			<html>&lt;p&gt;16-ти этажных кирпичных дома. В жилых домах на первых этажах предполагается размещение помещений общественного назначения. На жилых этажах размещаются одно-, двух и трехкомнатные квартиры.Планировка квартир решена с развитым комфортом, с санитарным зонированием на на &amp;laquo;дневную&amp;raquo; и &amp;laquo;ночную&amp;raquo; части жилого пространства, каждая имеет кладовую и лоджию. Вентилируемый фасад обеспечивает сбалансированный микроклимат помещений, сохраняя тепло зимой и прохладу летом. Отделка фасада производится керамогранитом.&lt;/p&gt;</html>
+		</module>
+		<module id="feedback" name="feedback" title="Обратная связь">
+			<form id="feedback" method="post" autocheck="autocheck">
+				<param name="action" value="feedback"/>
+				<field type="text" name="name" label="Контактное лицо" check="empty" mail="name"/>
+				<field type="text" name="phone" label="Контактный телефон" check="empty" mail="phone"/>
+				<field type="email" name="email" label="Электронная почта" check="email empty" mail="email"/>
+				<field type="textarea" name="message" label="Текст сообщения" rows="6" mail="message"/>
+				<field type="captcha" name="captcha" label="Введите результат выражения с картинки (цифрами)" check="empty"/>
+				<buttongroup>
+					<button type="submit" value="Отправить"/>
+					<button type="reset" value="Очистить"/>
+				</buttongroup>
+			</form>
+		</module>
+	</modules>
+<template id="default"><template id="form"/><template id="request"/></template></section>

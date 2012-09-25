@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section><modules><module id="m1" name="apVacancy" title="Список вакансий отрасли"><form id="article_form_edit" title="Изменить статью" method="post" autocheck="autocheck" baseURI="mysql://default/%TABLE%?id=%ID%">
+		<param name="row" uri="#id"/>
+		<field type="date" name="date" label="Дата (дд.мм.гггг)" check="empty" uri="#date"/>
+		<field type="text" name="title" label="Название должности" check="empty" size="60" uri="#title"/>
+		<field type="text" name="company" label="Название компании" check="empty" size="60" uri="#company"/>
+		<field type="text" name="city" label="Город" check="empty" size="60" uri="#city"/>
+		<field type="email" name="email" label="E-mail" check="email empty" size="60" uri="#email"/>
+		<field type="text" name="contact_face" label="Контактное лицо" check="empty" size="60" uri="#contact_face"/>
+		<field type="text" name="contact_phone" label="Телефон" check="empty" size="60" uri="#contact_phone"/>
+		<field type="select" name="type_employer" label="Тип работодателя">
+			<option value="0">Прямой работодатель</option>
+			<option value="1">Aгентство</option>
+		</field>
+		<field type="text" name="salary_from" label="Зарплата от" size="10" uri="#salary_from"/>
+		<field type="text" name="salary_to" label="Зарплата до" size="10" uri="#salary_to"/>
+		<field type="html" height="300" name="responsibility" label="Обязанности" uri="#responsibility"/>
+		<field type="html" height="300" name="requirements" label="Требования" uri="#requirements"/>
+		<field type="html" height="300" name="desc" label="Дополнительная информация" uri="#desc"/>
+		<field type="checkbox" name="send" label="Учавствует в рассылке" uri="#send"/>
+		<field type="checkbox" name="active" label="Опубликовать" uri="#active"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="update"/>
+			<button type="submit" value="Применить" class="ok" action="apply_update"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><form id="article_form_add" title="Добавить статью" method="post" autocheck="autocheck" baseURI="mysql://default/%TABLE%">
+		<param name="section" uri="#section"/>
+		<param name="module" uri="#module"/>
+		<param name="sort" uri="#sort"/>
+		<field type="date" name="date" label="Дата (дд.мм.гггг)" check="empty" uri="#date"/>
+		<field type="text" name="title" label="Название должности" check="empty" size="60" uri="#title"/>
+		<field type="text" name="company" label="Название компании" check="empty" size="60" uri="#company"/>
+		<field type="text" name="city" label="Город" check="empty" size="60" uri="#city"/>
+		<field type="email" name="email" label="E-mail" check="email empty" size="60" uri="#email"/>
+		<field type="text" name="contact_face" label="Контактное лицо" check="empty" size="60" uri="#contact_face"/>
+		<field type="text" name="contact_phone" label="Телефон" check="empty" size="60" uri="#contact_phone"/>
+		<field type="select" name="type_employer" label="Тип работодателя">
+			<option value="0">Прямой работодатель</option>
+			<option value="1">Aгентство</option>
+		</field>
+		<field type="text" name="salary_from" label="Зарплата от" size="10" uri="#salary_from"/>
+		<field type="text" name="salary_to" label="Зарплата до" size="10" uri="#salary_to"/>
+		<field type="html" height="300" name="responsibility" label="Обязанности" uri="#responsibility"/>
+		<field type="html" height="300" name="requirements" label="Требования" uri="#requirements"/>
+		<field type="html" height="300" name="desc" label="Дополнительная информация" uri="#desc"/>
+		<field type="checkbox" name="send" label="Учавствует в рассылке" checked="1" uri="#send"/>
+		<field type="checkbox" name="active" label="Опубликовать" uri="#active"/>
+		<buttonset>
+			<button type="submit" value="Сохранить" class="ok" action="add"/>
+			<button type="submit" value="Применить" class="ok" action="apply_add"/>
+			<button type="submit" value="Отмена" class="cancel" action="cancel"/>
+		</buttonset>
+	</form><rowlist id="article_list" pageSize="10" sort="asc">
+		<actions>
+			<action name="new" title="Добавить" class="add"/>
+			<action name="delete" title="Удалить выбранное"/>
+		</actions>
+		<filter logic="or" header="Фильтр" label="Найти">
+			<field type="text" name="title" operator="like" label="Название должности"/>
+			<field type="text" name="company" operator="like" label="Название Компании"/>
+			<field type="text" name="city" operator="like" label="Город"/>
+		</filter>
+		<col name="sort" header="№"/>
+		<col name="date" header="Дата" sort="1"/>
+		<col name="title" header="Название вакансии" sort="1"/>
+		<col name="company" header="Компания" sort="1"/>
+		<col name="city" header="Город" sort="1"/>
+		<buttons>
+			<button action="edit" title="Редактировать"/>
+			<button action="delete" title="Удалить"/>
+			<button action="move" title="Переместить"/>
+		</buttons>
+		<totals>
+			<total name="count" header="Найдено записей"/>
+		</totals>
+	</rowlist></module></modules></section>

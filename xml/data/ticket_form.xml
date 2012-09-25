@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section><modules><module id="m1" name="feedback" title="Отправить заявку"><form enctype="multipart/form-data" id="ticket_form" method="post" autocheck="autocheck" baseURI="mysql://%CONNECT%/%TABLE%#" theme="Новая заявка от компании с сайта" email="kirill@forumedia.ru" emailTpl="email_feedback">
+		<param name="action" value="feedback"/>
+		<param name="section" uri="section"/>
+		<param name="module" uri="module"/>
+		<param name="sort" uri="sort"/>
+		<field type="text" name="company" label="Название компании" check="empty" mail="1" size="40"/>
+		<field type="text" name="name" label="Контактное лицо" check="empty" mail="1" size="40"/>
+		<field type="email" name="email" label="Электронная почта" check="empty email" size="40"/>
+		<field type="file" name="file" label="Файл в формате MS Word (.doc или .docx)" check="empty" maxFileSize="2097152" accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+		<field type="captcha" name="captcha" label="Введите результат выражения с картинки (цифрами)" show="1" check="empty"/>
+		<buttongroup>
+			<button type="submit" value="Отправить"/>
+			<button type="reset" value="Очистить"/>
+		</buttongroup>
+	<good>&lt;p&gt;Заявка успешно отправлена.&lt;/p&gt;</good><fail>&lt;p&gt;При обработке письма возникла ошибка. Попробуйте отправить позднее или связаться с администратором, перейдя по ссылке в правом верхнем углу сайта.&lt;/p&gt;</fail></form></module><module id="m2" name="content" title="Форма заявки (текст)"><html>&lt;p&gt;Мы готовы рассмотреть описание Вашей вакансии в имеющемся у Вас формате.&lt;/p&gt;&#13;
+&lt;p&gt;При необходимости можете скачать нашу &lt;a href="userfiles/file/forma_zayavki.docx"&gt;форму Заявки&lt;/a&gt;.&lt;/p&gt;&#13;
+&lt;p&gt;Чем подробнее будет составлено описание вакансии, тем лучше мы будем понимать кого Вы ищете, тем более точно мы сможем предложить Вам кандидатов, тем самым сэкономив Ваше и наше время.&lt;/p&gt;</html></module><module id="m3" name="meta" title="Метатэги"/></modules><template id="default"><template id="form"/></template></section>

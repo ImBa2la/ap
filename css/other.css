@@ -1,0 +1,45 @@
+@charset "utf-8";
+/* CSS Document */
+
+.content > article > .printpos{
+	position:absolute;
+	right:50px;
+	top:30px;
+}
+.content > article > .printpos a.print{
+	display:inline-block;
+	background:url(../images/print.png) no-repeat left center;
+	padding:4px 0 4px 30px;
+	color:#907C59;
+}
+.content > article > .printpos a.print:hover{
+	color:#557186;
+}
+.content > article > .clickmy{
+	position:absolute;
+	right:200px;
+	top:30px;
+	padding:4px 0;
+}
+.content > article > .clickmy a{
+	background:url(../images/pagination.png) no-repeat 0 -48px;
+	line-height:16px;
+	padding-left:25px;
+	color:#907C59;
+}
+.content > article > .clickmy a:hover{
+	background:url(../images/pagination.png) no-repeat 0 -112px;
+	color:#557186;
+}
+.content > article > .backpage{
+	text-align:right;
+}
+.content > article > .backpage a{
+	background:url(../images/pagination.png) no-repeat 0 -16px;
+	padding-left:25px;
+	color:#907C59;
+}
+.content > article > .backpage a:hover{
+	background:url(../images/pagination.png) no-repeat 0 -80px;
+	color:#557186;
+}

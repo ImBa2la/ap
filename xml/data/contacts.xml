@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section><modules><module id="m1" name="content" title="Контакты"><html type="address">&lt;p&gt;г. Тула, пр. Ленина, д 108, оф 218 (2-й этаж)&lt;br /&gt;E-mail: &lt;a href="mailto:consult@loes.ru"&gt;consult@loes.ru&lt;/a&gt; &amp;nbsp; &amp;nbsp; &amp;nbsp; Skype: &lt;a href="skype:andrey71h?call"&gt;andrey71h&lt;/a&gt; &lt;span class="small"&gt;(онлайн конслультант)&lt;/span&gt;&lt;/p&gt;</html><html type="phones">&lt;h2&gt;Телефоны&lt;/h2&gt;&#13;
+&lt;p&gt;+7(4872) 23-55-92&lt;br /&gt;+7(4872) 35-26-35&lt;br /&gt;+7(4872) 35-03-25&lt;/p&gt;</html></module><module id="m2" name="meta" title="Метатэги"/><module id="m3" name="feedback" title="Форма обратной связи"><form title="Форма обратной связи" id="feedback_form" method="post" autocheck="autocheck" baseURI="mysql://%CONNECT%/%TABLE%#" theme="Поступило новое сообщение через форму обратной связи" email="kirill@forumedia.ru" emailTpl="email_feedback">
+		<param name="action" value="feedback"/>
+		<param name="section" uri="section"/>
+		<param name="module" uri="module"/>
+		<param name="sort" uri="sort"/>
+		<field type="text" name="name" label="Ваше имя" check="empty" mail="1" size="40"/>
+		<field type="email" name="email" label="Электронная почта" check="email empty" mail="email" size="40"/><field type="text" name="phone" label="Тема сообщения" check="empty" mail="1" size="40"/>
+		
+		<field type="textarea" name="message" label="Текст сообщения" rows="6" size="40" mail="message"/>
+		<field type="captcha" name="captcha" label="Введите результат выражения с картинки (цифрами)" show="1" check="empty"/>
+		<buttongroup>
+			<button type="submit" value="Отправить"/>
+			<button type="reset" value="Очистить"/>
+		</buttongroup>
+	<good>&lt;p&gt;Ваше сообщение успешно отправлено.&lt;/p&gt;</good><fail>&lt;p&gt;При отправке сообщения произошла ошибка.&lt;/p&gt;</fail></form></module></modules><template id="default"><template id="contacts"/><template id="form"/></template></section>
