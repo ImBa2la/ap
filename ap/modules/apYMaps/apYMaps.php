@@ -3,26 +3,7 @@ class apYMaps extends module{
 function __construct(DOMElement $e,structure $struct){
 	parent::__construct($e,$struct);
 }
-function run(){
-/*
-	global $_out,$_sec;
-	if(ap::isCurrentModule($this)){
-		ap::addMessage($this->getMessage());
-		if($form = $this->getForm()){
-			$form->replaceURI(array(
-				'ID' => $_sec->getId(),
-				'MD' => $this->getId()
-			));	
-			if(param('action')=='save'){
-				$form->save($values);
-				$this->redirect('save_ok');
-			}
-			$form->load();
-			$_out->elementIncludeTo($form->getRootElement(),'/page/section');
-		}else throw new Exception('Form not found',EXCEPTION_XML);
-	}
-*/
-}
+function run(){}
 function install(){
 	if($sec = ap::getClientSection($this->getSection()->getId())){
 		$modules = $sec->getModules();

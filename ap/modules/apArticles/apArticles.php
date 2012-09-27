@@ -5,24 +5,7 @@ private $rl;
 private $forms;
 protected $table = 'articles';
 protected $tableImages = 'articles_images';
-/*
-function ajax($params ,$xml, $mysql){
-	global $_struct;
-	extract($params);
-	switch($action){
-		case 'changeRow': 
-			if($target && ($row = intval($row)) && ($sec = $_struct->getSection($target))){
-				if($m = $sec->getModules()->get('@name="'.$this->getName().'"')){
-					$mysql->update($this->table,array('section'=>$target,'module'=>$m->getId()),'id='.mysql::str($row));
-					if(count($mysql->affectedRows())) $result = array('code'=>0,'responce'=>array('md'=>$m->getId(),'id'=>$target));
-					else $result = array('code'=>3,'error'=>'Wrong row id');				
-				}else $result = array('code'=>2,'error'=>'Module not found');				
-			}else $result = array('code'=>1,'error'=>'Empty target');
-			break;
-		default: $result = array('code'=>-1,'error'=>'Empty requst');
-	}
-	return json_encode($result);
-}*/
+
 function getRow(){
 	if($row = param('row')){
 		if(is_array($row)) foreach($row as $i => $r) $row[$i] = intval($r);
