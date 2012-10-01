@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section><modules><module id="m1" name="meta" title="Метатэги"/><module id="m2" name="content" title="О нас"><html>&lt;p&gt;Мы работаем с сентября 2001г.&lt;/p&gt;&#13;
-&lt;p&gt;Наши специалисты имеют профессиональное образование и опыт работы в психологии и работе с персоналом (подборе, оценке, создании систем мотиваций и т.д.)&lt;/p&gt;&#13;
-&lt;p&gt;За это время нашими клиентами стали десятки фирм и предприятий Тулы, Москвы, Санкт-Петербурга, Калуги, Костромы, Новосибирска и др. городов от небольших фирм до крупных комбинатов и Российских представительств западных фирм.&lt;/p&gt;</html></module><module id="m3" name="articles" title="Сотрудники"><list pageSize="12" pageParam="page" tagNameList="personnel" tagNameText="employee" sort="asc"/></module></modules><template id="default"><template id="about"/></template></section>

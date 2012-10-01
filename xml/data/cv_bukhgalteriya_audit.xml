@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section><modules><module id="m1" name="vacancy" title="Список вакансий отрасли"><list pageSize="10" pageParam="page" tagNameList="articles" tagNameText="articlesRow" sort="asc"/></module></modules><template id="default"><template id="vacancy"/></template></section>
