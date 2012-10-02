@@ -9,5 +9,3 @@ RewriteEngine on
 RewriteCond %{REQUEST_URI} !^.*/ap/{0,1}$
 RewriteCond %{REQUEST_URI} !^.+\.{1}[a-zA-Z0-9]{1,10}$
 RewriteRule ^.*$ index.php
-
-test
