@@ -98,6 +98,22 @@
 				<xsl:attribute name="size"><xsl:value-of select="@size"/></xsl:attribute>
 			</xsl:if>
 		</input>
+		<span id="calendar-rel"><img width="25" height="22" alt="{@label}" src="images/calendar-ico.png" /></span>
+		<script type='text/javascript' src='js/todo.calendar.js'></script>
+		<link href="css/calendar.css" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript">
+		todo.onload(function(){
+			todo.calendar(todo.get('<xsl:value-of select="@name" />'), {
+				rel:'calendar-rel',
+				position:{
+					vAlign:'bottom',//top,middle,bottom
+					hAlign:'right',//left,center,right
+					vOffset:1,
+					hOffset:-60
+				}
+			});
+		});
+		</script>
 	</div>
 </xsl:template>
 
@@ -224,7 +240,7 @@ input.onclick=function(){
 		<xsl:value-of select="parent::field/@name"/>
 		<xsl:value-of select="position()"/>
 	</xsl:variable>
-	<li><input type="checkbox" name="{parent::field/@name}[{@value}]" id="{$fid}">
+	<li><input type="checkbox" name="{parent::field/@name}[]" id="{$fid}">
 			<xsl:attribute name="value"><xsl:choose>
 				<xsl:when test="@value"><xsl:value-of select="@value"/></xsl:when>
 				<xsl:otherwise><xsl:value-of select="text()"/></xsl:otherwise>

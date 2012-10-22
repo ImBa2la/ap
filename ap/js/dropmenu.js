@@ -24,6 +24,7 @@ var _dmCookie=new Cookie('sidemenu'),
 		e._dmChangeState();
 		return e;
 	};
+console.log(_dmCookie);
 _dmCookie.addIndex=function(id){
 	var idx=this.indexes?this.indexes.split(','):[];
 	for(var i=0;i<idx.length;i++)if(idx[i]==id)return;

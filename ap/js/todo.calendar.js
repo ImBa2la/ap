@@ -53,7 +53,7 @@ todo.calendar = function(c,settings){
 			,rel			: settings&&settings.rel || null
 			,selectDate		: settings&&settings.selectDate		? settings.selectDate		: true
 			,selectPosition	: settings&&settings.selectPos		? settings.selectPos		: 'before'
-			,selectAttr		: settings&&settings.selectAttr		? settings.selectAttr		: {}
+			,selectAttr		: settings&&settings.selectAttr		? settings.selectAttr		: {'class':'list'}
 			,sep			: settings&&settings.sep			? settings.sep				: '.'
 			,yearOffsetDown	: settings&&settings.yearOffsetDown	? settings.yearOffsetDown	: 0
 			,yearOffsetUp	: settings&&settings.yearOffsetUp	? settings.yearOffsetUp		: 3
@@ -135,7 +135,7 @@ todo.calendar = function(c,settings){
 					left = left + parseInt(el.offsetLeft)
 					el = el.offsetParent
 				}
-				return {top:top, left:left};
+				return {top:top, left:left}
 			}
 			,'hide':function (e, o) {
 				e = e || window.event;
@@ -155,19 +155,35 @@ todo.calendar = function(c,settings){
 				if (e && e.type == 'click' && oInput == c && !todo.hc(o.box.className, 'disnone')) return setTimeout(function(){todo.cc(o.box, 'disnone')}, 400); //this.hide();
 				o.box.innerHTML = o.makeHtmlByDate(dd);
 				
+				console.log(o.box);
 				if(options.selectDate){
 					var  p = todo.create('p')
-						,months = o.buildField('select', options.selectAttr, options.mm)
-						,years = o.buildField('select', options.selectAttr, options.makeYears(options.year));
-					p.appendChild(years).parentNode.appendChild(months);
+						,next = todo.create('a',{href:'#',title:options.navTextNext,'class':'next'})
+						,prev = todo.create('a',{href:'#',title:options.navTextPrev,'class':'prev'})
+						,curM = todo.create('span',{},options.MM[dd.getMonth()])
+						,curY = todo.create('span',{},dd.getFullYear())
+						,months = o.buildField('ul', options.selectAttr, options.MM,'li')
+						,years = o.buildField('ul', options.selectAttr, options.makeYears(options.year),'li');
+					p.appendChild(curM).appendChild(months).parentNode.parentNode.appendChild(curY).appendChild(years).parentNode.parentNode.appendChild(next).parentNode.appendChild(prev);
 					o.box.insertBefore(p,(options.selectPosition == 'after' ? null : o.box.firstChild));
 					
+					//curM.onclick = function(){console.log(123);}
 					years.selectedIndex =  options.yearOffsetDown - options.year + dd.getFullYear();
 					years.onchange = function(){o.show(null, new Date(this.value, dd.getMonth(), 1));}
+					years.onclick = function(e){o.show(null, new Date(e.target.value, dd.getMonth(), 1));}
 					months.selectedIndex = dd.getMonth();
 					months.onchange = function(){o.show(null, new Date(dd.getFullYear(), this.value, 1));}
-				}
-				if(options.nav){
+					months.onclick = function(e){o.show(null, new Date(dd.getFullYear(), e.target.value, 1));}
+					
+					next.onclick = function(){
+						if(dd.getMonth()==11 && dd.getFullYear()==options.year+options.yearOffsetUp) return false;
+						o.show(null, new Date(dd.getMonth()==11?dd.getFullYear()+1:dd.getFullYear(),dd.getMonth()==11?0:dd.getMonth()+1, 1))
+					}
+					prev.onclick = function(){
+						if(dd.getMonth()==0 && dd.getFullYear()==options.year-options.yearOffsetDown) return false;
+						o.show(null, new Date(dd.getMonth()==0?dd.getFullYear()-1:dd.getFullYear(),dd.getMonth()==0?11:dd.getMonth()-1, 1))
+					}
+				}else if(options.nav){
 					var  p = todo.create('p')
 						,next = todo.create('a',{href:'#',title:options.navTextNext,'class':'next'})
 						,prev = todo.create('a',{href:'#',title:options.navTextPrev,'class':'prev'});
@@ -227,13 +243,13 @@ todo.calendar = function(c,settings){
 				}
 				return c;
 			}
-			,'buildField': function (el, params, idxs) {
+			,'buildField': function (el, params, idxs, elc) {
 				var el = todo.create(el,params);
-				if (idxs) {
+				if (idxs && elc) {
 					var values;
 					for (var id in idxs) {
 						values = {value:id};
-						todo.append(this.buildFieldSub('option', values, idxs[id]), el);
+						todo.append(this.buildFieldSub(elc, values, idxs[id]), el);
 					}
 				}
 				return el;
