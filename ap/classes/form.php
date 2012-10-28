@@ -228,7 +228,7 @@ function getValue(){
 	//return $this->getRootElement()->getAttribute('value');
 }
 static function imageExists($uri){
-	if(($v = jpgScheme::parseURI($uri)) && $v['path']){
+	if(($v = imageScheme::parseURI($uri)) && $v['path']){
 		return file_exists($v['path']);
 	}
 }
@@ -257,7 +257,7 @@ function setPreviewSize($w = null,$h = null,$max = null){
 	$this->getRootElement()->setAttribute('uri',$str);
 }
 static function getImagePath($uri){
-	if($v = jpgScheme::parseURI($uri)) return $v['path'];
+	if($v = imageScheme::parseURI($uri)) return $v['path'];
 }
 function removeImageFiles(){
 	$res = $this->getXML()->query('param[@uri]',$this->getRootElement());

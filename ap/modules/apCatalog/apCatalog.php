@@ -1,6 +1,7 @@
 <?
-class apVacancy extends apArticles{
-protected $table = 'vacancy';
+class apCatalog extends apArticles{
+protected $table = 'catalog';
+protected $tableImages = 'catalog_images';
 function getList(){
 	$rl = parent::getList();
 	$cond['str'] = '';
@@ -60,37 +61,34 @@ function showList(){
 		$_out->addSectionContent($rl->getRootElement());
 	}
 }
-function onAdd($action){
-	if($row = parent::onAdd($action)){
-		$mysql = new mysql();
-		$mysql->update($this->table, array('send'=>1), '`id`='.mysql::str($row));
-		return true;
-	}
-}
 function install(){
 	$mysql = new mysql();
 	if(!$mysql->hasTable($this->table)){
 		$mysql->query('CREATE TABLE `'.$mysql->getTableName($this->table).'` (
-		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-		`section` varchar(63) DEFAULT NULL,
-		`module` varchar(15) DEFAULT NULL,
-		`date` datetime DEFAULT NULL,
-		`title` varchar(55) NOT NULL,
-		`company` varchar(55) NOT NULL,
-		`city` varchar(55) NOT NULL,
-		`email` varchar(55) NOT NULL,
-		`contact_face` varchar(55) NOT NULL,
-		`contact_phone` varchar(55) NOT NULL,
-		`type_employer` tinyint(1) unsigned DEFAULT "0",
-		`salary_from` int(11) unsigned DEFAULT NULL,
-		`salary_to` int(11) unsigned DEFAULT NULL,
-		`responsibility` text,
-		`requirements` text,
-		`desc` text,
-		`active` tinyint(1) unsigned DEFAULT NULL,
-		`send` tinyint(1) unsigned NOT NULL DEFAULT "1",
-		`sort` int(10) unsigned NOT NULL,
-		PRIMARY KEY (`id`)
+	`id` int(9) unsigned NOT NULL AUTO_INCREMENT,
+	`section` varchar(63) DEFAULT NULL,
+	`module` varchar(63) DEFAULT NULL,
+	`date` datetime DEFAULT NULL,
+	`title` varchar(63) NOT NULL,
+	`price` double(10,2) DEFAULT NULL,
+	`producer_id` int(9) DEFAULT NULL,
+	`desc` text,
+	`capacity_cooling` double(3,2) DEFAULT NULL,
+	`capacity_heating` double(3,2) DEFAULT NULL,
+	`noise_level_min` varchar(55) DEFAULT NULL,
+	`noise_level_max` varchar(55) DEFAULT NULL,
+	`mode` varchar(55) DEFAULT NULL,
+	`mode_ventilation` tinyint(1) DEFAULT "0",
+	`mode_dehumidification` tinyint(1) DEFAULT "0",
+	`mode_night` tinyint(1) DEFAULT "0",
+	`mode_auto` tinyint(1) DEFAULT "0",
+	`motion_sensor` tinyint(1) DEFAULT "0",
+	`remote_control` tinyint(1) DEFAULT "0",
+	`inverter_power_control` tinyint(1) DEFAULT "0",
+	`air_filters` tinyint(1) DEFAULT "0",
+	`active` tinyint(1) unsigned DEFAULT "1",
+	`sort` int(9) unsigned NOT NULL,
+	PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8');	
 	}
 	if(parent::install()){

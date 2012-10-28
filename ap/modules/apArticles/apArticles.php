@@ -289,6 +289,7 @@ KEY `SectionIndex` (`section`)
 `id_article` int(10) unsigned DEFAULT NULL,
 `field_name` varchar(31) DEFAULT NULL,
 `title` varchar(255) DEFAULT NULL,
+`ext` varchar(4) NOT NULL,
 `sort` int(10) unsigned DEFAULT NULL,
 `active` tinyint(1) unsigned NOT NULL DEFAULT "1",
 PRIMARY KEY (`id`)

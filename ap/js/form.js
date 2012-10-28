@@ -67,7 +67,7 @@ fs._getFigureBySrc=function(src){
 fs._addImage=function(src,id,title){
 	if(this.style.display=='none')this.style.display='block';
 	var figure=this.appendChild(todo.create('figure')),name=this._fieldName+(id?'['+id+']':'___new[]');
-	figure.innerHTML='<img src="image.php?src='+src+'&w=130&h=100" width="130" height="100" alt="">'
+	figure.innerHTML='<img src="image.php?src='+src+'&w=130&h=100&alpha=1" width="130" height="100" alt="">'
 		+(this._hasTitle?'<input type="button" class="titleImageButton"><input type="hidden" name="title_'+name+'" class="titleImageField" value="'+(title?title:'')+'">':'')
 		+'<input type="button" class="deleteImageButton">'
 		+'<input type="hidden" name="'+name+'" value="'+src+'">';

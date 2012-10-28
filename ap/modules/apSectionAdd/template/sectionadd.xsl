@@ -41,8 +41,10 @@
 <script type="text/javascript">
 <xsl:text disable-output-escaping="yes">
 todo.onload(function(){
-	var input=todo.get('</xsl:text><xsl:value-of select="@name"/><xsl:text disable-output-escaping="yes">'),
-		testid=function(){
+	var title=todo.get('sec[title]')
+		,pref='</xsl:text><xsl:value-of select="/page/section/form//field[@name='alias']/text()" /><xsl:text disable-output-escaping="yes">'
+		,input=todo.get('</xsl:text><xsl:value-of select="@name"/><xsl:text disable-output-escaping="yes">')
+		,testid=function(){
 			if(this.value.match(/^[a-z]{1}[a-z0-9_-]{2,50}$/i)){
 				this._chars = true;
 				todo.ajax('',function(o){return function(text,xml){
@@ -58,7 +60,33 @@ todo.onload(function(){
 				this._chars=false;
 				this.style.border='1px solid red';
 			}
+		}
+		,translate=function(){
+			if(this.value){
+				todo.ajax('',function(o){return function(text,xml){
+					var  json = eval('('+ text +')');
+					input.value = pref;
+					if(!json.error &amp;&amp; json.sentences.length &gt; 0){
+						input.value += json.sentences[0].translit.toLowerCase().replace(/\s/gi,'_');
+					}
+					testid.call(input);
+				};}(this),{
+					'id':'</xsl:text><xsl:value-of select="$_sec/@id"/><xsl:text disable-output-escaping="yes">',
+					'md':'</xsl:text><xsl:value-of select="/page/section/@module"/><xsl:text disable-output-escaping="yes">',
+					'action':'ajax',
+					'translate':this.value
+				});
+			}
 		};
+	if(title){
+		if(title.addEventListener){
+			title.addEventListener('change',translate,false);
+			title.addEventListener('keyup',translate,false);
+		}else{
+			title.attachEvent('onchange',translate);
+			title.attachEvent('onkeyup',translate);
+		};
+	}
 	if(input){
 		testid.call(input);
 		if(input.addEventListener){
