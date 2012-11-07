@@ -8,7 +8,6 @@ $img = new images(
 		,isset($_GET['ha'])		? $_GET['ha']			: 'center'
 		,isset($_GET['va'])		? $_GET['va']			: 'middle'
 		,isset($_GET['rgb'])	? $_GET['rgb']			: null
-		,isset($_GET['alpha'])	? true					: false
 		,isset($_GET['max'])	? $_GET['max']			: 1024
 	);
 	if(isset($_GET['waterMark'])){

@@ -34,6 +34,7 @@ function getSchemeCacheObject($uri){
 static function getSchemeClassName($uri){
 	if(($url = parse_url($uri)) && isset($url['scheme'])){
 		if($url['scheme']=='file' && preg_match('/[\w_]*\.([\w_]+)+/',$url['path'],$res)){
+			$res[1] = (in_array($res[1],array('jpg','jpeg','png','gif'))) ? 'image' : $res[1];
 			$url['scheme'] = $res[1];
 		}
 		return $url['scheme'].'Scheme';

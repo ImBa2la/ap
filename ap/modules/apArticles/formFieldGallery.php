@@ -118,7 +118,7 @@ private function load($id_article){
 				if(!$isUpdate && !$param->hasAttribute('preview')) continue;
 				$e = $this->ff->getRootElement()->appendChild($param->cloneNode(true));
 				$e->setAttribute('name',$fieldName);
-				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$r['id'].(!preg_match('/[\w_]*\.([\w_]+)+/',$e->getAttribute('uri'),$res)?'$1.'.$r['ext']:null).'?',$e->getAttribute('uri')));
+				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$r['id'].(!preg_match('/[\w_]*\.([\w_]+)+/',substr($e->getAttribute('uri'),0,strpos($e->getAttribute('uri'),'?')),$res)?'$1.'.$r['ext']:null).'?',$e->getAttribute('uri')));
 				if($r['title']) $e->setAttribute('title',$r['title']);
 			}
 		}
@@ -151,9 +151,10 @@ private function addNew($id_article){
 			$name = $this->fieldName($img_id);
 			$this->values[$name] = $img['src'];
 			foreach($this->formats as $param){
+				//$param->ownerDocument->saveXML('temp.xml'); die;
 				$e = $this->ff->getRootElement()->appendChild($param->cloneNode(true));
 				$e->setAttribute('name',$name);
-				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$img_id.(!preg_match('/[\w_]*\.([\w_]+)+/',$e->getAttribute('uri'),$res)?'$1.'.strtolower(pathinfo($img['path'],PATHINFO_EXTENSION)):null).'?',$e->getAttribute('uri')));			
+				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$img_id.(!preg_match('/[\w_]*\.([\w_]+)+/',substr($e->getAttribute('uri'),0,strpos($e->getAttribute('uri'),'?')),$res)?'$1.'.strtolower(pathinfo($img['path'],PATHINFO_EXTENSION)):null).'?',$e->getAttribute('uri')));			
 			}
 		}
 	}
