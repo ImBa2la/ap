@@ -208,7 +208,7 @@ function initImages($form,$isUpdate){
 					&& !isset($_REQUEST[$ff->getName()][$fieldName])
 					&& !isset($arNewImages[$img->getAttribute('id')]))
 				{ //определяем картинки для удаления
-					$values[$fieldName] = jpgScheme::VALUE_DELETE;
+					$values[$fieldName] = imageScheme::VALUE_DELETE;
 					$rowsToDelete[] = $img;
 				}
 				foreach($formats as $param){

@@ -5,6 +5,7 @@
  * @author dev-kirill
  */
 class images {
+	private $filename;
 	private $image;
 	private $h;
 	private $w;
@@ -23,10 +24,9 @@ class images {
 	function __construct($src,$w=null,$h=null,$fixed=false,$hAlign=null,$vAlign=null,
 			$rgb=null,$alpha=false,$max=1024
 	){
-		if($filename = $this->checkFile($src)){ // file exist, continue.
-			//echo $filename; die;
+		if($this->filename = $this->checkFile($src)){ // file exist, continue.
 			$this->type = 0x0;//check extension and supported php format grafic file
-			switch(strtolower(pathinfo($filename,PATHINFO_EXTENSION))){
+			switch(strtolower(pathinfo($this->filename,PATHINFO_EXTENSION))){
 				case 'gif': $this->type |= IMG_GIF; break;
 				case 'png': $this->type |= IMG_PNG; break;
 				case 'jpg':
@@ -42,7 +42,7 @@ class images {
 			$this->w		= isset($w) ? intVal($w) : null;
 			$this->h		= isset($h) ? intVal($h) : null;
 			
-			list($this->wSource,$this->hSource) = getimagesize($filename); //real sizes
+			list($this->wSource,$this->hSource) = getimagesize($this->filename); //real sizes
 			
 			$this->offsetX = $this->offsetY = $this->offsetXSource = $offsetY = 0; // offset X, Y
 			if($this->w && $this->h){ //resize param for picture
@@ -103,9 +103,9 @@ class images {
 			$this->imageSource = null; //source temp image
 			
 			switch($this->type){
-				case IMG_GIF: $this->imageSource = imagecreatefromgif($filename); break;
-				case IMG_PNG: $this->imageSource = imagecreatefrompng($filename); break;
-				case IMG_JPG: $this->imageSource = imagecreatefromjpeg($filename); break;
+				case IMG_GIF: $this->imageSource = imagecreatefromgif($this->filename); break;
+				case IMG_PNG: $this->imageSource = imagecreatefrompng($this->filename); break;
+				case IMG_JPG: $this->imageSource = imagecreatefromjpeg($this->filename); break;
 			}
 			if($alpha){//preserve alpha
 				imagecolortransparent($this->image, imagecolorallocate($this->image, 255, 255, 255));
@@ -231,7 +231,10 @@ class images {
 	}
 	function save($name){
 		switch($this->type){
-			case IMG_GIF: $fd = imagegif($this->image,$name); break;
+			case IMG_GIF: 
+				if(!$this->isAnimation($this->filename)) $fd = imagegif($this->image,$name); 
+				else copy($this->filename,$name);
+				break;
 			case IMG_PNG: $fd = imagepng($this->image,$name); break;
 			case IMG_JPG: $fd = imagejpeg($this->image,$name,90); break;
 		}
@@ -270,6 +273,26 @@ class images {
 		return array("red"	=> 0xFF & ($int >> 0x10),
 					"green"	=> 0xFF & ($int >> 0x8),
 					"blue"	=> 0xFF & $int);
+	}
+	static function isAnimation($filename) {
+		if(!($fh = @fopen($filename, 'rb')))
+			return false;
+		$count = 0;
+		//an animated gif contains multiple "frames", with each frame having a
+		//header made up of:
+		// * a static 4-byte sequence (\x00\x21\xF9\x04)
+		// * 4 variable bytes
+		// * a static 2-byte sequence (\x00\x2C)
+
+		// We read through the file til we reach the end of the file, or we've found
+		// at least 2 frame headers
+		while(!feof($fh) && $count < 2) {
+			$chunk = fread($fh, 1024 * 100); //read 100kb at a time
+			$count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00\x2C#s', $chunk, $matches);
+		}
+
+		fclose($fh);
+		return $count > 1;
 	}
 }
 

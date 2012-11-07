@@ -9,7 +9,7 @@ function __construct(formField $ff,$table,$values = null){
 	$this->ff = $ff;
 	$this->setImageTable($table);
 	$this->setValues($values);
-	if($this->ff->getRootElement()->hasAttribute('_ffg')){//Нельзя создавать больше одного объекта для одного поля
+	if($this->ff->getRootElement()->hasAttribute('_ffg')){//РќРµР»СЊР·СЏ СЃРѕР·РґР°РІР°С‚СЊ Р±РѕР»СЊС€Рµ РѕРґРЅРѕРіРѕ РѕР±СЉРµРєС‚Р° РґР»СЏ РѕРґРЅРѕРіРѕ РїРѕР»СЏ
 		throw new Exception('Duplicate formFieldGallery object for "'.$this->ff->getName().'" field');
 	}
 	$this->formats = array();
@@ -53,7 +53,6 @@ function prepareEdit($id_article){
 }
 function prepareUpdate($id_article,$values){
 	$this->setValues($values);
-	//vdump($this->getSubmitImages());
 	$this->load($id_article);
 	$this->addNew($id_article);
 	return $this->values;
@@ -103,7 +102,7 @@ private function load($id_article){
 	$values = $this->getSubmitImages();
 	$isUpdate = is_array($values);
 	$arId = $isUpdate ? array_keys($values['exist']) : array();
-	if(($rs = $mysql->query('select `id`,`title` from `'.$mysql->getTableName($this->table).'` where `id_article`='.$id_article.' and `field_name`="'.addslashes($this->ff->getName()).'"'
+	if(($rs = $mysql->query('select `id`,`title`,`ext` from `'.$mysql->getTableName($this->table).'` where `id_article`='.$id_article.' and `field_name`="'.addslashes($this->ff->getName()).'"'
 			.(count($arId) ? ' and `id` not in('.implode(',',$arId).')' : null).' order by `sort`')
 		)
 		&& mysql_num_rows($rs)
@@ -112,16 +111,14 @@ private function load($id_article){
 		while($r = mysql_fetch_assoc($rs)){
 			$fieldName = $this->fieldName($r['id']);
 			if($isUpdate){
-				$this->values[$fieldName] = jpgScheme::VALUE_DELETE;
+				$this->values[$fieldName] = imageScheme::VALUE_DELETE;
 				$rowsToDelete[] = $r['id'];
 			}
 			foreach($this->formats as $param){
-				#vdump($param->getAttribute('preview'));
-				#vdump($e->getAttribute('uri'));
 				if(!$isUpdate && !$param->hasAttribute('preview')) continue;
 				$e = $this->ff->getRootElement()->appendChild($param->cloneNode(true));
 				$e->setAttribute('name',$fieldName);
-				$e->setAttribute('uri',str_replace('%IMG_ID%',$r['id'],$e->getAttribute('uri')));
+				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$r['id'].(!preg_match('/[\w_]*\.([\w_]+)+/',$e->getAttribute('uri'),$res)?'$1.'.$r['ext']:null).'?',$e->getAttribute('uri')));
 				if($r['title']) $e->setAttribute('title',$r['title']);
 			}
 		}
@@ -130,12 +127,12 @@ private function load($id_article){
 	}
 	if($isUpdate){
 		$v = array();
+		#vdump($values);
 		foreach($this->sortOrder as $i => $str) if(preg_match('/id([0-9]+)/',$str,$m)){
-			$v[$m[1]] = '('.$m[1].',"'.addslashes($values['exist'][$m[1]]['title']).'",'.($i+1).')';
+			$v[$m[1]] = '('.$m[1].',"'.addslashes($values['exist'][$m[1]]['title']).'","'.strtolower(pathinfo($values['exist'][$m[1]]['path'],PATHINFO_EXTENSION)).'",'.($i+1).')';
 		}
-		//vdump($values);
 		if(count($v)){
-			$mysql->query('insert into `'.$mysql->getTableName($this->table).'` (`id`,`title`,`sort`) values '.implode(',',$v).' on duplicate key update `title`=values(`title`),`sort`=values(`sort`)');
+			$mysql->query('insert into `'.$mysql->getTableName($this->table).'` (`id`,`title`,`ext`,`sort`) values '.implode(',',$v).' on duplicate key update `title`=values(`title`),`sort`=values(`sort`)');
 		}
 	}
 }
@@ -146,6 +143,7 @@ private function addNew($id_article){
 		if($mysql->insert($this->table,array(
 			'field_name'=>'"'.$this->ff->getName().'"'
 			,'id_article'=>$id_article
+			,'ext'=>'"'.strtolower(pathinfo($img['path'],PATHINFO_EXTENSION)).'"'
 			,'title'=>$img['title'] ? '"'.addslashes($img['title']).'"' : 'null'
 			,'sort'=>$img['sort']
 		))){
@@ -155,7 +153,7 @@ private function addNew($id_article){
 			foreach($this->formats as $param){
 				$e = $this->ff->getRootElement()->appendChild($param->cloneNode(true));
 				$e->setAttribute('name',$name);
-				$e->setAttribute('uri',str_replace('%IMG_ID%',$img_id,$e->getAttribute('uri')));
+				$e->setAttribute('uri',preg_replace('/%IMG_ID%(_\w+)?\?/',$img_id.(!preg_match('/[\w_]*\.([\w_]+)+/',$e->getAttribute('uri'),$res)?'$1.'.strtolower(pathinfo($img['path'],PATHINFO_EXTENSION)):null).'?',$e->getAttribute('uri')));			
 			}
 		}
 	}

@@ -71,6 +71,7 @@ try{
 	$_out->xmlInclude($_site);
 	$_events->happen('PageReady');
 	
+	$_out->de()->setAttribute('host',$_SERVER['HTTP_HOST']);
 	$_tpl = $_sec->getTemplate();
 	$_out->save('temp.xml');
 	echo $_tpl->transform($_out);
@@ -88,6 +89,7 @@ try{
 			
 			$_out->xmlInclude($_struct);
 			$_out->xmlInclude($_site);
+			$_out->de()->setAttribute('host',$_SERVER['HTTP_HOST']);
 			
 			$_tpl = new template($_struct->getTemplatePath().'default.xsl');
 			$_tpl->addTemplate($_struct->getTemplatePath().'404.xsl');

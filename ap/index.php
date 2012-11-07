@@ -1,6 +1,7 @@
 <?
 function autoload($class){
-	if(substr($class,0,2)=='ap' && file_exists($path = 'modules/'.$class.'/'.$class.'.php')){
+	if ((substr($class,0,2)=='ap' || substr($class,0,1)=='e')  
+			&& file_exists($path = 'modules/'.$class.'/'.$class.'.php')) {
 		require_once $path;
 		return;
 	}

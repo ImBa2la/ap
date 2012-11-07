@@ -120,21 +120,8 @@ function run(){
 				}
 				break;
 			case 'change': 
-				if(($row = $this->getRow()) && ($target = param('target'))){
-					if(($sec = $_struct->getSection($target))){
-						if($m = $sec->getModules()->get('@name="'.$this->getName().'"')){
-							if(intval(param('onDragSuccess'))){
-								$mysql = new mysql();
-								$mysql->update($this->table,array('section'=>$target,'module'=>$m->getId()),'id='.mysql::str($row));
-								if(count($mysql->affectedRows())) $result = array('code'=>0,'responce'=>array('md'=>$m->getId(),'id'=>$target));
-								else $result = array('code'=>3,'error'=>'Wrong row id');
-							}else $result = array('code'=>10,'responce'=>intval(param('onDragSuccess')));			
-						}else $result = array('code'=>2,'error'=>'Module not found');	
-					}else $result = array('code'=>1,'error'=>'Empty target');
-				}else $result = array('code'=>-1,'error'=>'Empty requst');
-				echo json_encode($result);
+				echo $this->onChange();
 				die;
-				break;
 			case 'move':
 				if(($row = $this->getRow())
 					&& ($pos = param('pos'))
@@ -171,6 +158,52 @@ function run(){
 				$this->showList();
 		}
 	}
+}
+function onChange(){
+	global $_struct;
+	if(($row = $this->getRow()) && ($target = param('target'))){
+		if(($sec = $_struct->getSection($target))){
+			if($m = $sec->getModules()->get('@name="'.$this->getName().'"')){
+				if(intval(param('onDragSuccess'))){
+					$mysql = new mysql();
+					$form = $this->getForm('add');
+					$xml = $form->getXML();
+					$nodes = $xml->query('.//field[@type="image"]',$form->getRootElement());
+					$fImage = $images = array();
+					$curSection = $this->getSection()->getId();
+
+					foreach($nodes as $node) //take image nodes
+						if(($bURI = $node->getAttribute('baseURI')) && preg_match('#%SECTION%#',$bURI))
+							$fImage[] = $node->getAttribute('name');
+
+					if(count($fImage)){
+						$rs = $mysql->query('SELECT `id` FROM `'.$mysql->getTableName($this->tableImages).'` WHERE `id_article`="'.$row.'"');
+						while($res = mysql_fetch_assoc($rs))
+							$images[] = $res['id']; //take images id`s
+
+						if(count($images) && $bURI){
+							$bURI = /*$_SERVER['DOCUMENT_ROOT']*/'..'.str_replace(array('%SECTION%','image://$HOST$','file://'),array($curSection,null,null),$bURI).'/';
+							foreach(glob($bURI.'*') as $file){
+								preg_match('#^[0-9]+#',pathinfo($file,PATHINFO_BASENAME),$match);
+								if(in_array($match[0],$images)){
+									if (!is_dir(str_replace($curSection,$target,$bURI))) mkdir(str_replace($curSection,$target,$bURI));
+									if (copy($file,str_replace($curSection,$target,$file))) {
+										unlink($file);
+									}
+								}
+							}
+						}
+					}								
+
+					$mysql->update($this->table,array('section'=>$target,'module'=>$m->getId()),'id='.mysql::str($row));
+					if(count($mysql->affectedRows())) $result = array('code'=>0,'responce'=>array('md'=>$m->getId(),'id'=>$target));
+					else $result = array('code'=>3,'error'=>'Wrong row id');
+				}else $result = array('code'=>10,'responce'=>intval(param('onDragSuccess')));			
+			}else $result = array('code'=>2,'error'=>'Module not found');	
+		}else $result = array('code'=>1,'error'=>'Empty target');
+	}else $result = array('code'=>-1,'error'=>'Empty requst');
+	
+	return json_encode($result);
 }
 function showList(){
 	global $_out;
@@ -289,6 +322,7 @@ KEY `SectionIndex` (`section`)
 `id_article` int(10) unsigned DEFAULT NULL,
 `field_name` varchar(31) DEFAULT NULL,
 `title` varchar(255) DEFAULT NULL,
+`ext` varchar(4) NOT NULL,
 `sort` int(10) unsigned DEFAULT NULL,
 `active` tinyint(1) unsigned NOT NULL DEFAULT "1",
 PRIMARY KEY (`id`)

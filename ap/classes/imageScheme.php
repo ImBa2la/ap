@@ -1,5 +1,5 @@
 <?
-class jpgScheme{
+class imageScheme{
 private $values = array();
 private $cache = array();
 const VALUE_DELETE = 'delete';
@@ -13,7 +13,7 @@ function save(){
 			&& $this->checkPath($v['path'])
 		){
 			$str.= $uri.' ::: '.$value.'<br>';
-			if($value==jpgScheme::VALUE_DELETE){
+			if($value==imageScheme::VALUE_DELETE){
 				if(file_exists($v['path'])) unlink($v['path']);
 			}elseif($value) $this->saveImage($value,$v['path'],$v['params']);
 			

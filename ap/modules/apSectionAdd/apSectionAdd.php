@@ -71,6 +71,21 @@ function run(){
 					}
 					die;
 				}
+				if($translate = param('translate')){
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_URL,'http://translate.google.ru/translate_a/t?ie=UTF-8&client=x&text='.urlencode($translate).'&sl=en&tl=ru');
+					curl_setopt($curl, CURLOPT_TIMEOUT, 3);
+					curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120822 Firefox/15.0 SeaMonkey/2.12');
+					if(($res = curl_exec($curl))){
+						echo $res;
+					}else{
+						echo json_encode(array('code'=>5,'error'=>1));
+					}
+					curl_close($curl);
+					die;
+				}
 				if($issetid = param('isset')){
 					echo ap::getClientSection($issetid) ? '0' : '1';
 					die;
@@ -80,6 +95,8 @@ function run(){
 			case 'apply':
 				if(is_array($sec = param('sec'))
 					&& $sec['id']
+					&& (preg_match('#^[a-z]{1}[a-z0-9_-]{2,50}$#',$sec['id']))
+					&& !ap::getClientSection($sec['id'])
 				){
 					$form->replaceURI(array('PATH' => $this->getQueryPath(param('parent'))));
 					$form->save($_REQUEST);
