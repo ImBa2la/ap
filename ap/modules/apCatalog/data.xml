@@ -24,9 +24,9 @@
 		<field type="text" name="noiseLevel2" label="Максимальный уровень шума" size="20" uri="#noise_level_max"/>
 		<field type="text" name="noiseLevel1" label="Минимальный уровень шума" size="20" uri="#noise_level_min"/>		
 		<field type="html" height="300" name="desc" label="Описание" uri="#desc"/>
-		<field type="image" name="image" label="Изображения" baseURI="file:///userfiles/articles/%SECTION%" max="10">
-			<param name="image" uri="/%IMG_ID%.jpg?max=1024"/>
-			<param name="image" uri="/%IMG_ID%_preview.jpg?w=200" preview="preview"/>
+		<field type="image" name="image" label="Изображения" baseURI="image://$HOST$/userfiles/articles/%SECTION%" max="10">
+			<param name="image" uri="/%IMG_ID%?max=1024"/>
+			<param name="image" uri="/%IMG_ID%_preview?w=200" preview="preview"/>
 		</field>
 		<field type="checkbox" name="active" label="Опубликовать" uri="#active"/>
 		<buttonset>
@@ -62,9 +62,9 @@
 		<field type="text" name="noiseLevel2" label="Максимальный уровень шума" size="20" uri="#noise_level_max"/>
 		<field type="text" name="noiseLevel1" label="Минимальный уровень шума" size="20" uri="#noise_level_min"/>		
 		<field type="html" height="300" name="desc" label="Описание" uri="#desc"/>
-		<field type="image" name="image" label="Изображения" baseURI="file:///userfiles/articles/%SECTION%" max="10">
-			<param name="image" uri="/%IMG_ID%.jpg?max=1024"/>
-			<param name="image" uri="/%IMG_ID%_preview.jpg?w=200" preview="preview"/>
+		<field type="image" name="image" label="Изображения" baseURI="image://$HOST$/userfiles/articles/%SECTION%" max="10">
+			<param name="image" uri="/%IMG_ID%?max=1024"/>
+			<param name="image" uri="/%IMG_ID%_preview?w=200" preview="preview"/>
 		</field>
 		<field type="checkbox" name="active" label="Опубликовать" uri="#active"/>
 		<buttonset>

@@ -90,7 +90,6 @@ function saveImage($src,$dst,$param = null){
 		,isset($param['ha'])	? $param['ha']			: 'center'
 		,isset($param['va'])	? $param['va']			: 'middle'
 		,isset($param['rgb'])	? $param['rgb']			: null
-		,isset($param['alpha'])	? true					: false
 		,isset($param['max'])	? $param['max']			: 1024
 	);
 	if(isset($param['waterMark'])){
@@ -102,7 +101,6 @@ function saveImage($src,$dst,$param = null){
 			,isset($param['waterHa'])	? $param['waterHa']			: 'center'
 			,isset($param['waterVa'])	? $param['waterVa']			: 'middle'
 			,isset($param['waterRGB'])	? $param['waterRGB']		: null
-			,isset($param['waterAlpha'])? true						: false
 			,isset($param['waterMax'])	? $param['waterMax']		: 1024	
 		);
 		$img->addWatermark(

@@ -22,7 +22,7 @@ class images {
 	private $max;
 	
 	function __construct($src,$w=null,$h=null,$fixed=false,$hAlign=null,$vAlign=null,
-			$rgb=null,$alpha=false,$max=1024
+			$rgb=null,$max=1024
 	){
 		if($this->filename = $this->checkFile($src)){ // file exist, continue.
 			$this->type = 0x0;//check extension and supported php format grafic file
@@ -104,18 +104,17 @@ class images {
 			
 			switch($this->type){
 				case IMG_GIF: $this->imageSource = imagecreatefromgif($this->filename); break;
-				case IMG_PNG: $this->imageSource = imagecreatefrompng($this->filename); break;
+				case IMG_PNG:
+					$this->imageSource = imagecreatefrompng($this->filename); 
+					imagecolortransparent($this->image, imagecolorallocate($this->image, 255, 255, 255));
+					imagealphablending($this->image, false);
+					imagesavealpha($this->image, true);
+					imagecolortransparent($this->imageSource, imagecolorallocate($this->imageSource, 255, 255, 255));
+					imagealphablending($this->imageSource, false);
+					imagesavealpha($this->imageSource, true);
+					break;
 				case IMG_JPG: $this->imageSource = imagecreatefromjpeg($this->filename); break;
-			}
-			if($alpha){//preserve alpha
-				imagecolortransparent($this->image, imagecolorallocate($this->image, 255, 255, 255));
-				imagealphablending($this->image, false);
-				imagesavealpha($this->image, true);
-				imagecolortransparent($this->imageSource, imagecolorallocate($this->imageSource, 255, 255, 255));
-				imagealphablending($this->imageSource, false);
-				imagesavealpha($this->imageSource, true);
-			}
-			
+			}			
 			
 			if($rgb)
 				imagefill($this->image, 0, 0, $rgb);
