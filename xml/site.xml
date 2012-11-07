@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<site name="Рекрутинговое агенство ЛОЭС-консалтинг" domain="loes.ru" email="pgood@forumedia.com"><users><user login="admintula" pass="c9229e737ac044baef4579fc2bbd0975" name="Admin"/><user login="irina" pass="202cb962ac59075b964b07152d234b70" name="Ирина"/></users><mysql><con id="default" host="localhost" user="root" db="loes" pref="loes_"/></mysql></site>
+<site name="Кондиционеры" domain="invertis.ru" email="ImBa2la@mail.ru"><users><user login="admintula" pass="c9229e737ac044baef4579fc2bbd0975" name="Admin"/></users><mysql><con id="default" host="localhost" user="root" db="invertis" pref="invertis_"/></mysql><youtube/></site>

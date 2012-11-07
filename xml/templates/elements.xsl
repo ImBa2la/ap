@@ -7,7 +7,7 @@
 <!-- Текущий раздел -->
 <xsl:variable name="_sec" select="/page/structure//sec[@selected='selected']"/>
 <!-- Базовый URL -->
-<xsl:variable name="_base_url">http://localhost/loes.ru/site/</xsl:variable>
+<xsl:variable name="_base_url">http://<xsl:value-of select="/page/@host" />/</xsl:variable>
 
 <!-- Заголовочные тэги -->
 <xsl:template name="head">
