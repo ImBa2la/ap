@@ -34,14 +34,7 @@ todo.calendar = function(c,settings){
 		options = {
 			/*settings*/																	/*Default values*/
 			boxClassName	: settings&&settings.boxClassName	? settings.boxClassName		: 'todo-calendar'
-			,holidays		: settings&&settings.holidays?settings.holidays					: {
-				/*format YYYY-MM-DD or MM-DD*/
-				'10-31':'Хэллоуин — канун Дня всех святых', 
-				'11-01':'День судебного пристава',
-				'11-19':'День ракетных войск и артиллерии',
-				'12-12':'День Конституции Российской Федерации',
-				'12-31':'День Сурка'
-			}
+			,holidays		: settings&&settings.holidays?settings.holidays					: {}
 			,dn				: settings&&settings.days			? settings.days				: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
 			,mm				: settings&&settings.months			? settings.months			: ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
 			,MM				: settings&&settings.monthsFull		? settings.monthsFull		: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь']
@@ -76,7 +69,7 @@ todo.calendar = function(c,settings){
 			'_':c
 			,'box':todo.append(todo.create('div',{'class':options.boxClassName+' mm disnone'}))
 			,'rel':todo.get(options.rel) || null
-			,'date':null
+			,'date': function() {var parseDate = c.value.split('.'); return new Date(parseDate[2],parseDate[1],parseDate[0])}()
 			,'getEvent':function(d){
 				d = d.replace(/\b(\d)\b/g, '0$1');
 				return options.holidays[d] || options.holidays[d.substr(5)];
@@ -121,7 +114,7 @@ todo.calendar = function(c,settings){
 					if (i == currDay) cN.push(options.hover);
 					cN = (cN.length) ? ' class="' + cN.join(' ') + '"' : '';
 					week[arr[i]] = '<div' + cN +  title + '>' + i + '</div>';
-					if (arr[i] === 6) week = flush(week);
+					if ((arr[i] === 6) && (i != arr.length-1)) week = flush(week);
 				}
 				flush(week);
 
@@ -138,11 +131,10 @@ todo.calendar = function(c,settings){
 				return {top:top, left:left}
 			}
 			,'hide':function (e, o) {
-				e = e || window.event;
 				o = o || c._calendar;
 				c.onfocus = o.show;
-				if (e && o && !todo.hc(o.box.className, 'disnone')) 
-					setTimeout(function(){todo.cc(o.box, 'disnone')}, 400);
+				if (o && !todo.hc(o.box.className, 'disnone'))
+					setTimeout(function(){todo.cc(o.box, 'disnone')}, 100);
 			}
 			,'show': function(e, dd){
 				e = e || window.event
@@ -155,33 +147,41 @@ todo.calendar = function(c,settings){
 				if (e && e.type == 'click' && oInput == c && !todo.hc(o.box.className, 'disnone')) return setTimeout(function(){todo.cc(o.box, 'disnone')}, 400); //this.hide();
 				o.box.innerHTML = o.makeHtmlByDate(dd);
 				
-				console.log(o.box);
 				if(options.selectDate){
 					var  p = todo.create('p')
-						,next = todo.create('a',{href:'#',title:options.navTextNext,'class':'next'})
-						,prev = todo.create('a',{href:'#',title:options.navTextPrev,'class':'prev'})
+						,next = todo.create('a',{href:'javascript:void(0);',title:options.navTextNext,'class':'next'})
+						,prev = todo.create('a',{href:'javascript:void(0);',title:options.navTextPrev,'class':'prev'})
 						,curM = todo.create('span',{},options.MM[dd.getMonth()])
 						,curY = todo.create('span',{},dd.getFullYear())
-						,months = o.buildField('ul', options.selectAttr, options.MM,'li')
-						,years = o.buildField('ul', options.selectAttr, options.makeYears(options.year),'li');
+						,months = o.buildField('ul', options.selectAttr, options.MM,'li','getMonth')
+						,years = o.buildField('ul', options.selectAttr, options.makeYears(options.year),'li','getFullYear');
 					p.appendChild(curM).appendChild(months).parentNode.parentNode.appendChild(curY).appendChild(years).parentNode.parentNode.appendChild(next).parentNode.appendChild(prev);
 					o.box.insertBefore(p,(options.selectPosition == 'after' ? null : o.box.firstChild));
 					
-					//curM.onclick = function(){console.log(123);}
+					years.parentNode.onclick=
+					months.parentNode.onclick=function(){
+						var v=this.getElementsByTagName('ul')[0],f=v.style.display=='block';
+						todo.loop(this.parentNode.getElementsByTagName('ul'),function(){
+							this.style.display='none';
+						});
+						v.style.display=f?'none':'block';
+					};
 					years.selectedIndex =  options.yearOffsetDown - options.year + dd.getFullYear();
 					years.onchange = function(){o.show(null, new Date(this.value, dd.getMonth(), 1));}
-					years.onclick = function(e){o.show(null, new Date(e.target.value, dd.getMonth(), 1));}
+					years.onclick = function(e){e = e || window.event; e.target = e.target || e.srcElement; o.show(null, new Date(e.target.value, dd.getMonth(), 1));}
 					months.selectedIndex = dd.getMonth();
 					months.onchange = function(){o.show(null, new Date(dd.getFullYear(), this.value, 1));}
-					months.onclick = function(e){o.show(null, new Date(dd.getFullYear(), e.target.value, 1));}
+					months.onclick = function(e){e = e || window.event; e.target = e.target || e.srcElement; o.show(null, new Date(dd.getFullYear(), e.target.value, 1));}
 					
 					next.onclick = function(){
-						if(dd.getMonth()==11 && dd.getFullYear()==options.year+options.yearOffsetUp) return false;
-						o.show(null, new Date(dd.getMonth()==11?dd.getFullYear()+1:dd.getFullYear(),dd.getMonth()==11?0:dd.getMonth()+1, 1))
+						var lastMonth = dd.getMonth()==11;
+						var lastYear = dd.getFullYear()==options.year+options.yearOffsetUp;
+						o.show(null, new Date(lastMonth && !lastYear ? dd.getFullYear()+1 : dd.getFullYear(),lastMonth?(lastYear?dd.getMonth():0):dd.getMonth()+1, 1))
 					}
 					prev.onclick = function(){
-						if(dd.getMonth()==0 && dd.getFullYear()==options.year-options.yearOffsetDown) return false;
-						o.show(null, new Date(dd.getMonth()==0?dd.getFullYear()-1:dd.getFullYear(),dd.getMonth()==0?11:dd.getMonth()-1, 1))
+						var firstMonth = dd.getMonth()==0;
+						var firstYear = dd.getFullYear()==options.year-options.yearOffsetDown;
+						o.show(null, new Date(firstMonth && ! firstYear? dd.getFullYear()-1 : dd.getFullYear(),firstMonth? (firstYear?dd.getMonth():11):dd.getMonth()-1, 1))
 					}
 				}else if(options.nav){
 					var  p = todo.create('p')
@@ -192,12 +192,14 @@ todo.calendar = function(c,settings){
 					o.box.insertBefore(p,(options.navPosition == 'after' ? null : o.box.firstChild));
 					
 					next.onclick = function(){
-						if(dd.getMonth()==11 && dd.getFullYear()==options.year+options.yearOffsetUp) return false;
-						o.show(null, new Date(dd.getMonth()==11?dd.getFullYear()+1:dd.getFullYear(),dd.getMonth()==11?0:dd.getMonth()+1, 1))
+						var lastMonth = dd.getMonth()==11;
+						var lastYear = dd.getFullYear()==options.year+options.yearOffsetUp;
+						o.show(null, new Date(lastMonth && !lastYear ? dd.getFullYear()+1 : dd.getFullYear(),lastMonth?(lastYear?dd.getMonth():0):dd.getMonth()+1, 1))
 					}
 					prev.onclick = function(){
-						if(dd.getMonth()==0 && dd.getFullYear()==options.year-options.yearOffsetDown) return false;
-						o.show(null, new Date(dd.getMonth()==0?dd.getFullYear()-1:dd.getFullYear(),dd.getMonth()==0?11:dd.getMonth()-1, 1))
+						var firstMonth = dd.getMonth()==0;
+						var firstYear = dd.getFullYear()==options.year-options.yearOffsetDown;
+						o.show(null, new Date(firstMonth && ! firstYear? dd.getFullYear()-1 : dd.getFullYear(),firstMonth? (firstYear?dd.getMonth():11):dd.getMonth()-1, 1))
 					}
 				}
 				if (todo.hc(o.box.className, 'disnone')){
@@ -229,9 +231,9 @@ todo.calendar = function(c,settings){
 				} 
 				o.box.month = dd.getMonth();
 				o.box.year = dd.getFullYear();
-				o.box.onclick = o.setDate;
 				o.box.onmouseover = function(){c.onblur = '';}
 				o.box.onmouseout = function(){c.onblur = o.hide;}
+				o.box.onclick = o.setDate;
 				c.focus();
 			}
 			,'buildCArr':function (y) { /*array monthes by year*/
@@ -243,12 +245,13 @@ todo.calendar = function(c,settings){
 				}
 				return c;
 			}
-			,'buildField': function (el, params, idxs, elc) {
+			,'buildField': function (el, params, idxs, elc,funcName) {
 				var el = todo.create(el,params);
 				if (idxs && elc) {
 					var values;
 					for (var id in idxs) {
 						values = {value:id};
+						if(this.date[funcName]() == id) values['className'] = 'current';
 						todo.append(this.buildFieldSub(elc, values, idxs[id]), el);
 					}
 				}

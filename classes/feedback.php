@@ -186,8 +186,6 @@ function getSentData($form){
 function sendEmail($xml,$form){
 	global $_out,$_site;
 	// отправляем почту админу и дублируем пользователю, если есть почтовые поля
-	#$e = $_out->createElement('final',array('id'=>'email'));
-	$e = $this->getSection()->getXML()->createElement('final',null);
 	
 	if(($xml->query('./field',$xml->de())->item(0) || $xml->query('./attach',$xml->de())->item(0))
 		&& $xml->de()->setAttribute('domain',$_site->de()->getAttribute('domain'))
@@ -211,12 +209,8 @@ function sendEmail($xml,$form){
 		&& @$mail->send() //send email to admin
 		//формируем почтовое сообщение для пользователя
 		&& ($form->getAttribute('sendUser') ? $this->sendEmailUser($xml,$form):true)
-	)xml::setElementText($e,xml::getElementText ($this->getSection()->getXML()->query('good',$form)->item(0)));
-	else xml::setElementText($e,xml::getElementText ($this->getSection()->getXML()->query('fail',$form)->item(0)));
-	
-	$form->appendChild($e);
-	
-	//$_out->addSectionContent($e);//финал в контент
+	) return true;
+	else return false;
 }
 function sendEmailUser($xml,$form){
 	if(($tpl = new template(
@@ -293,7 +287,11 @@ function insertDB($data,$e){ //@todo udaptate with tables fields
 			,'sort'		=> $this->getNextSortIndex()
 		));*/
 		$form->save($data);
-	}else $this->err('Form not found');
+	}else {
+		$this->err('Form not found');
+		return false;
+	}
+	return true;
 }
 function getNextSortIndex($form){
 	$mysql = new mysql();
@@ -318,10 +316,15 @@ function run(){
 				
 		if($this->isSent($form)){ //форму отправили
 			if(!$this->check($form) && ($res = $this->getSentData($form))){
-				if(count($res['mysql']) > 0) 
-					$this->insertDB($res['mysql'],$form);
-				if($res['xml']) 
-					$this->sendEmail($res['xml'],$form);
+				$e = $this->getSection()->getXML()->createElement('final',null);
+				$resultSQL = $resultMail = true;
+				
+				if(count($res['mysql'])) $resultSQL = $this->insertDB($res['mysql'],$form);
+				if($res['xml']) $resultMail = $this->sendEmail($res['xml'],$form);
+				
+				if($resultSQL && $resultMail) xml::setElementText($e,xml::getElementText ($this->getSection()->getXML()->query('good',$form)->item(0)));
+				else xml::setElementText($e,xml::getElementText ($this->getSection()->getXML()->query('fail',$form)->item(0)));
+				$form->appendChild($e);
 			}else{ // Ошибка - заполняем форму
 				$this->fillForm($form);
 			}

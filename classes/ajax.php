@@ -24,7 +24,11 @@ define('PATH_TPL_AP','../ap/xml/templates/');
 try{
 	if(!session_id() && !headers_sent()) session_start();
 	$_site = new site(PATH_SITE); #for mysql class
-	$_struct = new structure(PATH_STRUCT_AP,PATH_DATA_AP,PATH_TPL_AP);
+	$_struct = new structure(
+			 (param('ap')	? PATH_STRUCT_AP:PATH_STRUCT)
+			,(param('ap')	? PATH_DATA_AP	:PATH_DATA)
+			,(param('ap')	? PATH_TPL_AP	:PATH_TPL)
+	);
 	$ajax = new ajax();
 	/*data manipulation here.*/
 	echo $ajax->callMethod($_REQUEST,new xml(null,'responce'),new mysql());
@@ -44,21 +48,22 @@ function callMethod($params,$xml,$mysql){
 function getCallable($params){
 	global $_struct;
 	if(($sId = $params['section']) && ($mId = $params['md'])){//actions for module class
-		$xml = ap::getClientStructure();
 		if($root = $_struct->query('/structure/sec[@id="apData"]')->item(0)){
+			$xml = ap::getClientStructure();
 			$res = $xml->query('/structure/*');
 			foreach($res as $node) $root->appendChild($_struct->importNode($node));
 		}
 		if(($sec = $_struct->getSection($sId))
 			&& ($c = $sec->getModules()->getById($mId))
 		){
+			
 			return $c;
 		}
 	}elseif($params['action']){
 		return new $params['action']();	
 	}
 	return false;
-
+	
 }
 }	
 ?>

@@ -34,7 +34,6 @@ function getSchemeCacheObject($uri){
 static function getSchemeClassName($uri){
 	if(($url = parse_url($uri)) && isset($url['scheme'])){
 		if($url['scheme']=='file' && preg_match('/[\w_]*\.([\w_]+)+/',$url['path'],$res)){
-			$res[1] = (in_array($res[1],array('jpg','jpeg','png','gif'))) ? 'image' : $res[1];
 			$url['scheme'] = $res[1];
 		}
 		return $url['scheme'].'Scheme';
@@ -96,7 +95,6 @@ function save($data){
 					$val = floatval($val);
 				else $val = null;
 			}
-			
 			$scheme->add($uri,$val);
 		}
 	}
@@ -113,6 +111,11 @@ function replaceURI($v){
 		}
 	}
 }
+function appendField($e) {
+	$lastField = $this->getXML()->query('.//field['.$this->getXML()->evaluate('count(.//field)',$this->e).']',$this->e)->item(0);
+	$ff = new formField($lastField);
+	return $ff->insertAfter($e);
+}
 function getField($field){
 	$f = null;
 	$xml = $this->getXML();
@@ -127,19 +130,13 @@ function getField($field){
 			case 'image':
 				return new formImageField($e);
 			case 'multiselect':
-			case 'select':
 				return new formSelect($e);
-			case 'checkboxset':
-				return new formCheckboxSet($e);
-			case 'checkbox':
-				return new formCheckbox($e);
-			case 'banner':
-				return new formBanner($e);
 			default:
 				if($e->tagName=='param'){
 					return new formHiddenField($e);
-				}else
-					return new formField($e);
+				}elseif(class_exists($classname = 'form'.ucfirst($e->getAttribute('type')))){
+					return new $classname($e);
+				}else return new formField($e);
 		}
 	}
 }
@@ -156,6 +153,49 @@ class formField{
 protected $e;
 function __construct(DOMElement $e){
 	$this->e = $e;
+}
+protected static function create($tagName,$type,$fieldName,$label = null,$uri = null) { 
+	$xml = new xml(null,$tagName);
+	$xml->de()->setAttribute('type',$type);
+	$xml->de()->setAttribute('name',$fieldName);
+	if($label) $xml->de()->setAttribute('label',$label);
+	if($uri) $xml->de()->setAttribute('uri',$uri);
+
+	switch($type){
+		case 'image':
+			return new formImageField($xml->de());
+		case 'multiselect':
+			return new formSelect($xml->de());
+		default:
+			if($xml->de()->tagName=='param'){
+				return new formHiddenField($xml->de());
+			}elseif(class_exists($classname = 'form'.ucfirst($type))){
+				return new $classname($xml->de());
+			}else return new formField($xml->de());
+	}
+}
+function insert(formField $e,$mode = null) {
+	$node = $this->getXML()->dd()->importNode($e->getRootElement(),true);
+
+	if(!$mode || $mode == "inside") {
+		$this->e->parentNode->appendChild($node);
+	} else if($mode == "before") {
+		$this->e->parentNode->insertBefore($node, $this->e);
+	} else if($mode == "after") {
+		if($this->e->nextSibling) {
+			$this->e->parentNode->insertBefore($node, $this->e->nextSibling);
+		} else {
+			$this->e->parentNode->appendChild($node);
+		}      
+	}
+	$className = get_class($e);
+	return new $className($node);
+}
+function insertAfter(formField $e) {
+	return $this->insert($e,'after');
+}
+function insertBefore(formField $e) {
+	return $this->insert($e,'before');
 }
 function getXML(){
 	return new xml($this->e);
@@ -210,9 +250,15 @@ function setValue($value){
 function getValue(){
 	return $this->e->hasAttribute('checked');
 }
+static function create($fieldName,$label = null,$uri = null){
+	return parent::create('field', 'checkbox', $fieldName, $label, $uri);
+}
 }
 
 class formHiddenField extends formField{
+static function create($fieldName,$label = null,$uri = null){
+	return parent::create('field', 'param', $fieldName, $label, $uri);
+}
 function setValue($value){
 	$this->getRootElement()->setAttribute('value',$value);
 }
@@ -222,6 +268,9 @@ function getValue(){
 }
 
 class formImageField extends formField{
+static function create($fieldName,$label = null,$uri = null){
+	return parent::create('field', 'image', $fieldName, $label, $uri);
+}
 function setValue($value){
 	//$this->getRootElement()->setAttribute('value',$value);
 }
@@ -229,7 +278,7 @@ function getValue(){
 	//return $this->getRootElement()->getAttribute('value');
 }
 static function imageExists($uri){
-	if(($v = imageScheme::parseURI($uri)) && $v['path']){
+	if(($v = jpgScheme::parseURI($uri)) && $v['path']){
 		return file_exists($v['path']);
 	}
 }
@@ -258,7 +307,7 @@ function setPreviewSize($w = null,$h = null,$max = null){
 	$this->getRootElement()->setAttribute('uri',$str);
 }
 static function getImagePath($uri){
-	if($v = imageScheme::parseURI($uri)) return $v['path'];
+	if($v = jpgScheme::parseURI($uri)) return $v['path'];
 }
 function removeImageFiles(){
 	$res = $this->getXML()->query('param[@uri]',$this->getRootElement());
@@ -269,6 +318,9 @@ function removeImageFiles(){
 }
 
 class formSelect extends formField{
+static function create($fieldName,$label = null,$uri = null){
+	return parent::create('field', 'select', $fieldName, $label, $uri);
+}
 function setValue($value){
 	$this->e->setAttribute('value',$value);
 }
@@ -279,14 +331,5 @@ function addOption($value,$text){
 	$xml = new xml($this->e);
 	$this->e->appendChild($xml->createElement('option',array('value'=>$value),$text));
 }
-}
-
-class formCheckboxSet extends formSelect{
-	function addOption($value,$text,$check){
-		$xml = new xml($this->e);
-		$values = array('value'=>$value);
-		if($check) $values['checked'] = true;
-		$this->e->appendChild($xml->createElement('option',$values,$text));
-	}
 }
 ?>

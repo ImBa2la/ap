@@ -25,6 +25,7 @@ var form = todo.get('form_add');
 					o._new_id=text=='1';
 					o.style.border='1px solid '+(o._new_id?'green':'red');
 				};}(this),{
+					'ap':'ap',
 					'section':'</xsl:text><xsl:value-of select="$_sec/@id"/><xsl:text disable-output-escaping="yes">',
 					'md':'</xsl:text><xsl:value-of select="/page/section/@module"/><xsl:text disable-output-escaping="yes">',
 					'action':'apSubsections',
@@ -45,6 +46,7 @@ var form = todo.get('form_add');
 					}
 					testid.call(input);
 				};}(this),{
+					'ap':'ap',
 					'section':'</xsl:text><xsl:value-of select="$_sec/@id"/><xsl:text disable-output-escaping="yes">',
 					'md':'</xsl:text><xsl:value-of select="/page/section/@module"/><xsl:text disable-output-escaping="yes">',
 					'translate':this.value

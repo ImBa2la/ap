@@ -125,6 +125,24 @@ function run(){
 		}
 	}
 }
+function fixedFields($form){
+	global $_sec;
+	$clientSection = ap::getClientSection($_sec->getId());
+	$md = $clientSection->getXML()->getElementById($this->getId());
+	if($clientSection->getXML()->evaluate('string(./form[1]/@dbSave)',$md)
+		&& ($dbConnect = $clientSection->getXML()->evaluate('string(./form[1]/@dbConnect)',$md))
+		&& ($dbTable = $clientSection->getXML()->evaluate('string(./form[1]/@dbTable)',$md))
+		&& ($ff = $form->appendField(formSelect::create('uri', 'Имя поля в таблице базы данных для сохранения:', '/@uri')))
+	) {
+		$mysql = new mysql($dbConnect);
+		$q = 'SHOW COLUMNS FROM '.$mysql->getTableName($dbTable);
+		$rs = $mysql->query($q);
+		while($res = mysql_fetch_assoc($rs)) {
+			if(!$res['Extra']) $ff->addOption($res['Field'],$res['Field']);
+		}
+
+	}
+}
 function onDelete(){
 	if($row = $this->getRow()){
 		if(!is_array($row)) $row = array($row);
@@ -149,6 +167,7 @@ function onUpdate($action){
 		&& $this->tl->getById($row)
 	){
 		$form = $this->getForm($action);
+		$this->fixedFields($form);
 		$form->replaceURI(array(
 			'ID' => $_sec->getId(),
 			'MD' => $this->getId(),
@@ -166,6 +185,7 @@ function onEdit($action){
 	global $_out,$_sec;
 	if($row = $this->getRow()){
 		$form = $this->getForm($action);
+		$this->fixedFields($form);
 		$form->replaceURI(array(
 			'ID' => $_sec->getId(),
 			'MD' => $this->getId(),
@@ -182,11 +202,13 @@ function onAdd(){
 			 'type'		=>$_REQUEST['type']
 			,'name'		=>$this->tl->generateId('f')
 			,'label'	=>$_REQUEST['label']
-			,'mail'		=>1
+			,'mail'		=>$_REQUEST['mail'] ? 1 : null
 			,'check'	=>$_REQUEST['check']? @$this->checks[$_REQUEST['type']] : null
 			,'size'		=>$_REQUEST['size']
 		);
 		if($_REQUEST['type'] == 'textarea' && $_REQUEST['rows']) $values['rows'] = $_REQUEST['rows'] ? $_REQUEST['rows'] : 6;
+		if($_REQUEST['uri']) $values['uri'] = $_REQUEST['uri'];
+		$_REQUEST['row'] = $values['name'];
 		$e = $this->tl->append($values);
 		$this->tl->move($e,intval($this->tl->getNum()-1));
 		$this->tl->getXML()->save();
@@ -197,6 +219,7 @@ function onAdd(){
 function onNew($action){
 	global $_out;
 	$form = $this->getForm($action);
+	$this->fixedFields($form);
 	if($ff = $form->getField('size')) $ff->setValue(40);
 	$_out->elementIncludeTo($form->getRootElement(),'/page/section');
 }
@@ -331,6 +354,16 @@ function settings($action){
 			$select_tpl->addOption($item,$item);
 			$select_uTpl->addOption($item,$item);
 		}
+		
+		#fill tables
+		$form->load(); //for database connection
+		$con = $select_connects->getValue();
+		$mysql = new mysql(($con? $con : null));
+		$rs = $mysql->query('SHOW TABLES');
+		$select_tb = $form->getField('form_db_name_table');
+		while($res = mysql_fetch_array($rs))
+			$select_tb->addOption($res[0], $res[0]);
+		
 		$form->load();
 		$_out->addSectionContent($form->getRootElement());
 	}

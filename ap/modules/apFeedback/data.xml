@@ -69,6 +69,8 @@
 			<field type="text" name="tab_title" label="Заголовок закладки" size="40" uri="file:///ap/xml/data/%ID%.xml?/section/modules/module[@id='%MD%']/@title"/>
 			<field type="text" name="form_title" label="Заголовок формы" size="40" uri="/form/@title"/>
 			<field type="checkbox" name="form_capcha" label="Использовать проверку капчи" uri="/form/field[@type='captcha']/@show"/>
+			<field type="text" name="form_class" label="Класс для тэга формы" size="20" uri="/form/@class"/>
+			<field type="text" name="form_id" label="Айди для тэга формы" size="20" uri="/form/@id"/>
 			<field type="html" name="form_mess_ok" label="Сообщение формы при успешной обработке" uri="/form/good" height="300" />
 			<field type="html" name="form_mess_fail" label="Сообщение формы при неудачной обработке" uri="/form/fail" height="300" />
 		</fieldset>
@@ -89,7 +91,9 @@
 			<field type="select" rel="saveDB" name="form__db_name_connect" label="Имя соединения с базой данных" size="40" uri="/form/@dbConnect">
 				<option value="">...</option>
 			</field>
-			<field type="text" rel="saveDB" name="form_db_name_table" label="Имя таблицы" size="40" uri="/form/@dbTable" />
+			<field type="select" rel="saveDB" name="form_db_name_table" label="Имя таблицы" uri="/form/@dbTable">
+				<option value="">...</option>
+			</field>
 		</fieldset>
 		<buttonset>
 			<button type="submit" value="Сохранить" class="ok" action="update"/>
